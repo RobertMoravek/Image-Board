@@ -1,0 +1,104 @@
+* {
+    box-sizing: content-box;
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+    background-image: url("./imageboredbg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    max-width: 100%;
+    min-height: 100vh;
+    min-width: 350px;
+}
+
+
+
+h1, h2, h3 {
+    font-family: 'Pacifico', cursive;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+
+header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 0;
+    position: fixed;
+    background: inherit;
+    min-width: 350px;
+}
+
+main {
+    position: relative;
+    top: 9rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: -1;
+}
+
+.imgCanvas {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.imgCard {
+    border: 2px solid black;
+    width: 300px;
+    height: 500px;
+    background-color: rgb(0, 19, 36);
+    margin: 0 1rem 1rem 1rem;
+}
+
+.imgInfo {
+    padding: 1rem;
+}
+
+.imgCard img{
+    object-fit: cover;
+    height: 300px;
+    width: 300px;
+}
+
+.imgTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    height: 3rem;
+    margin-bottom: 1rem;
+}
+
+.imgDescription {
+    height: 3rem;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.imgUser {
+    color: rgb(91, 192, 255);
+}
+
+.imgTime {
+    font-size: 0.8rem;
+    color: rgb(175, 175, 175);
+}
+
+@media screen and (max-width: 700px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    main {
+    top: 7rem;
+}
+}
