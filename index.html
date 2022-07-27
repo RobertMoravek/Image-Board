@@ -12,9 +12,14 @@
             <h1>Bored of your images 🥱</h1>
         </header>
         <main id="main">
-            <form action="/images" method="post" enctype="multipart/form-data" @submit.prevent="onFormSubmit" id="uploadForm">
-                <h3 class="uploadHeadline">Upload an image</h3>
+            <form action="/images" method="post" enctype="multipart/form-data" @submit.prevent="onFormSubmit" class="uploadForm">
+                <h3 class="uploadHeadline" id="uploadExpander" v-on:click="uploadExpander">Upload an image<span class="arrowDown"></span></h3>
+                <label for="uploadInput">Image</label>
                 <input type="file" name="uploadInput" id="uploadInput" v-if="message == ''">
+                <label for="uploadTitle">Title</label>
+                <input type="text" name="uploadTitle" id="uploadTitle" placeholder="My image" v-if="message == ''">
+                <label for="uploadDescription">Description</label>                
+                <input type="text" name="uploadDescription" id="uploadDescription" placeholder="Look at it!" v-if="message == ''">
                 <input type="submit" value="Upload" class="submitButton" v-if="message == ''">
                 <div class="status green" v-if="message == 'File uploaded'">{{message}}</div>
                 <div class="status red" v-if="message == 'Upload failed'">{{message}}</div>
@@ -26,8 +31,8 @@
                     <div class="imgInfo">
                         <p class="imgTitle"> {{img.title}} </p>
                         <p class="imgDescription"> {{img.description}} </p>
-                        <p class="imgUser">by {{img.username}} </p>
-                        <p class="imgTime"> {{img.created_at}} </p>
+                        <!-- <p class="imgUser">by {{img.username}} </p>
+                        <p class="imgTime"> {{img.created_at}} </p> -->
                     </div>
                 </div>
             </div>

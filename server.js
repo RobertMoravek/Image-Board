@@ -1,5 +1,6 @@
 const db = require("./db.js");
 const {uploader} = require("./middleware.js");
+const s3 = require ("./S3.js");
 
 const path = require("path");
 const express = require("express");
@@ -22,13 +23,21 @@ app.get("/images", (req, res) => {
         });
 });
 
-app.post("/images", uploader.single("uploadInput"), (req, res) => {
+app.post("/images", uploader.single("uploadInput"), s3.upload, (req, res) => {
+    console.log('req.body', req.body);
+    console.log('req.file', req.file);
     if(req.file){
-        res.json({
-            success: true,
-            message: "File uploaded",
-            file: `/${req.file.filename}`,
-        });
+        let amazonUrl = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
+        db.insertImage(amazonUrl, req.body.uploadTitle, req.body.uploadDescription, "tempUser")
+            .then(() => {
+                res.json({
+                    success: true,
+                    message: "File uploaded",
+                    url: amazonUrl,
+                    title: req.body.uploadTitle,
+                    description: req.body.uploadDescription,
+                });
+            });
     } else {
         res.json({
             success: false,

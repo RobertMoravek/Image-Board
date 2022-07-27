@@ -28,10 +28,24 @@ const app = Vue.createApp({
                 })
                 .then((result) => {
                     this.message = result.message;
-                    if (result.file){
-                        this.imageRows.unshift({url: result.file});
+                    if (result.url){
+                        this.imageRows.unshift({url: result.url, title: result.title, description: result.description, user: result.user});
+
                     }
                 });
+        },
+        uploadExpander: function (e){
+            if (e.currentTarget.parentNode.classList.contains("expanded")){
+                e.currentTarget.parentNode.classList.remove("expanded");
+                e.currentTarget.childNodes[1].classList.remove("arrowUp");
+
+            } else {
+                e.currentTarget.parentNode.classList.add("expanded");
+                e.currentTarget.childNodes[1].classList.add("arrowUp");
+                console.log(e.currentTarget.childNodes);
+                
+                
+            }
         }
     },
     mounted: function () {
@@ -44,8 +58,11 @@ const app = Vue.createApp({
                 for (let item of imageRows){
                     item.created_at = item.created_at.slice(0, 16).replace("T", " ");
                 }
+                imageRows = imageRows.reverse();
                 this.imageRows = imageRows;
             });
+        
+
     }
 });
 
