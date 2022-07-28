@@ -7,39 +7,46 @@
         <style>@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Raleway&display=swap');</style>  
         <link rel="stylesheet" type="text/css" href="/style.css">
     </head>
-    <body>
-        <header>
-            <h1>Bored of your images 🥱</h1>
+    <body id="body">
+        <div id="bodydiv">
+            <header>
+                <h1>Bored of your images 🥱</h1>
+                <form action="/images" method="post" enctype="multipart/form-data" @submit.prevent="onFormSubmit" class="uploadForm">
+                    <h3 class="uploadHeadline" id="uploadExpander" v-on:click="uploadExpander">Upload an image<span class="arrowDown"></span></h3>
+                    <label for="uploadInput">Image</label>
+                    <input type="file" name="uploadInput" id="uploadInput" v-if="message == ''">
+                    <label for="uploadTitle">Title</label>
+                    <input type="text" name="uploadTitle" id="uploadTitle" placeholder="My image" v-if="message == ''">
+                    <label for="uploadDescription">Description</label>                
+                    <input type="text" name="uploadDescription" id="uploadDescription" placeholder="Look at it!" v-if="message == ''">
+                    <input type="submit" value="Upload" class="submitButton" v-if="message == ''">
+                    <div class="status green" v-if="message == 'File uploaded'">{{message}}</div>
+                    <div class="status red" v-if="message == 'Upload failed'">{{message}}</div>
+                    <img v-for="image in images" v-bind:src="image" alt="an image" class="image"/>
+                </form>
         </header>
         <main id="main">
-            <form action="/images" method="post" enctype="multipart/form-data" @submit.prevent="onFormSubmit" class="uploadForm">
-                <h3 class="uploadHeadline" id="uploadExpander" v-on:click="uploadExpander">Upload an image<span class="arrowDown"></span></h3>
-                <label for="uploadInput">Image</label>
-                <input type="file" name="uploadInput" id="uploadInput" v-if="message == ''">
-                <label for="uploadTitle">Title</label>
-                <input type="text" name="uploadTitle" id="uploadTitle" placeholder="My image" v-if="message == ''">
-                <label for="uploadDescription">Description</label>                
-                <input type="text" name="uploadDescription" id="uploadDescription" placeholder="Look at it!" v-if="message == ''">
-                <input type="submit" value="Upload" class="submitButton" v-if="message == ''">
-                <div class="status green" v-if="message == 'File uploaded'">{{message}}</div>
-                <div class="status red" v-if="message == 'Upload failed'">{{message}}</div>
-                <img v-for="image in images" v-bind:src="image" alt="an image" class="image"/>
-            </form>
+
+            
+
+
             <div class="imgCanvas">
-                <div class="imgCard" v-for="img in imageRows">
+                <div class="imgCard" v-for="img in imageRows" @click="this.imageId=img.id" >
                     <img v-bind:src="img.url" class="imgImgage">
                     <div class="imgInfo">
-                        <p class="imgTitle"> {{img.title}} </p>
-                        <p class="imgDescription"> {{img.description}} </p>
+                        <p class="imgTitle">{{img.title}}</p>
+                        <p class="imgDescription">{{img.description}}</p>
                         <!-- <p class="imgUser">by {{img.username}} </p>
                         <p class="imgTime"> {{img.created_at}} </p> -->
                     </div>
                 </div>
             </div>
-            
+            <img-card-big v-if="this.imageId" :id="imageId" @close="this.imageId=0"></img-card-big>
         </main>
         <footer>
         </footer>
+        </div>
+        
         <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
     </body>
 </html>

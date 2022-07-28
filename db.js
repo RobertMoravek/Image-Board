@@ -9,7 +9,10 @@ if (process.env.NODE_ENV == "production") {
 const spicedPg = require("spiced-pg");
 const db = spicedPg(dbUrl);
 
-module.exports.getImages = () => {
+module.exports.getImages = (id) => {
+    if (id) {
+        return db.query(`SELECT * FROM images WHERE id=${id}`);
+    }
     return db.query(`SELECT * FROM images`);
 };
 

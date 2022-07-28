@@ -1,4 +1,5 @@
 import * as Vue from './vue.js';
+import imgCardBig from "./imgCardBig.js";
 
 const app = Vue.createApp({
     data: function () {
@@ -6,9 +7,14 @@ const app = Vue.createApp({
             imageRows: [],
             images: [],
             message: "",
+            imageId: 0,
         };
     },
     methods: {
+
+        test: function () {
+            console.log('event received');
+        },
         onFormSubmit(e) {
             // e.preventDefault; instead do it in the html
             console.log('form submit stopped');
@@ -29,7 +35,7 @@ const app = Vue.createApp({
                 .then((result) => {
                     this.message = result.message;
                     if (result.url){
-                        this.imageRows.unshift({url: result.url, title: result.title, description: result.description, user: result.user});
+                        this.imageRows.unshift({id: result.id, url: result.url, title: result.title, description: result.description, user: result.user});
 
                     }
                 });
@@ -46,8 +52,12 @@ const app = Vue.createApp({
                 
                 
             }
-        }
+        },
     },
+    components: {
+        "img-card-big": imgCardBig,
+    },
+
     mounted: function () {
         fetch("/images")
             .then((imageRows) => {
@@ -66,4 +76,4 @@ const app = Vue.createApp({
     }
 });
 
-app.mount("#main");
+app.mount("#bodydiv");

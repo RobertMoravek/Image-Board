@@ -10,6 +10,18 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
+app.get("/images/:id", (req, res) => {
+    db.getImages(req.params.id)
+        .then((imageResult) => {
+            // console.log(imageResult.rows);
+            res.json(imageResult.rows);
+            return;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    
+});
 
 app.get("/images", (req, res) => {
     db.getImages()
