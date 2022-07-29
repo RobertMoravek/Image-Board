@@ -22,10 +22,14 @@ body {
 
 h1 {
     font-family: 'Pacifico', cursive;
-    font-size: 1.75rem;
+    font-size: 1.7rem;
 	text-shadow: 10px 10px 10px rgba(0, 0, 0, 1) ; 
 	-webkit-text-shadow: 10px 10px 10px rgba(0, 0, 0, 1) ; 
 	-moz-text-shadow: 10px 10px 10px rgba(0, 0, 0, 1) ; 
+}
+
+#bored {
+    width: 300px;
 }
 
 h3 {
@@ -47,7 +51,7 @@ header {
     /* justify-content: space-between; */
     overflow: visible;
     height: 5rem;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
 main {
@@ -117,13 +121,14 @@ input {
     background-color: rgb(0, 19, 36);
     border: 2px solid white;
     padding: 0.25rem;
-    margin: 0.5rem 0.5rem;
+    margin: 0.5rem 0;
 }
 
 .submitButton{
     font-size: 1rem;
     padding: 0.5rem 2rem;
     margin-top: 1rem;
+    cursor: pointer;
 }
 
 #uploadForm img {
@@ -167,23 +172,37 @@ input {
 .imgCardBig {
     width: 100%;
     height: 100%;
+    min-width: 350px;
     background-color: rgb(0, 19, 36, 0.8);
     -webkit-box-shadow: 10px 10px 22px 3px #000000; 
     box-shadow: 10px 10px 22px 3px #000000;
     position: fixed;
-    top: 5rem;
+    top: 0rem;
     left: 0;
     z-index: 50;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 1rem;
+    padding: 0 1rem 1rem 1rem;
+    /* border: 1px solid red; */
+}
+
+.imgBox{
+    width: auto;
+    max-width: 90%;
+    height: auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid white;
+    margin-top: 5rem;
+    background-color: rgb(0, 19, 36, 0.85);
+
 
 }
 
 .imgInfo {
-    padding: 0rem 1rem;
+    padding: 2rem 1rem;
 }
 
 .imgCard img{
@@ -191,45 +210,27 @@ input {
     height: 296px;
     width: 296px;
     border-bottom: 2px solid white;
-}
-
-.imgPhoto{
-    width: auto;
-    height: 80%;
-    display: flex;
-    align-items: flex-start;
 
 }
+
 
 .imgClose {
     /* height: 100px;
     width: 100px; */
     font-size: 2rem;
-    position: relative;
+    position: absolute;
     top: 0;
     right: 4rem;
     padding: 1rem;
     cursor: pointer;
 }
 
-.imgPhoto img{
-    /* object-fit: scale-down; */
-    height: 100%;
-    width: auto;
-    border: 2px solid white;
-    -webkit-box-shadow: 10px 10px 22px 3px #000000; 
-    box-shadow: 10px 10px 22px 3px #000000;
-}
-
-#bigImg::after{
-    content: "X";
-    border: 3px solid red;
-    height: 50px;
-    width: 50px;
-    z-index: 50;
-    font-size: 100px;
-    display: inline-block;
-    position: absolute;
+.imgBox img{
+    object-fit: contain;
+    /* height: 100%; */
+    max-width: 100%;
+    max-height: 90%;
+    /* border: 2px solid white; */
 }
 
 .imgTitle {
@@ -260,14 +261,40 @@ input {
     z-index: 5;
 }
 
-.imgUser {
+.imgUser, .commentUser {
     color: rgb(91, 192, 255);
 }
 
-.imgTime {
+
+.imgTime, .commentTime {
     font-size: 0.8rem;
     color: rgb(175, 175, 175);
 }
+
+#comments {
+    padding: 1rem;
+    border-top: 2px solid white;
+}
+
+.commentBox {
+    border-bottom: 1px solid white;
+    padding: 1rem 0;
+}
+
+.comment {
+    padding: 0.5rem 0 1rem 0;
+}
+
+
+.newComment {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 0;;
+}
+
+
+
 
 @media screen and (max-width: 700px) {
     h1 {

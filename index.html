@@ -10,7 +10,7 @@
     <body id="body">
         <div id="bodydiv">
             <header>
-                <h1>Bored of your images 🥱</h1>
+                <h1 id="bored">Bored of your images 🥱</h1>
                 <form action="/images" method="post" enctype="multipart/form-data" @submit.prevent="onFormSubmit" class="uploadForm">
                     <h3 class="uploadHeadline" id="uploadExpander" v-on:click="uploadExpander">Upload an image<span class="arrowDown"></span></h3>
                     <label for="uploadInput">Image</label>
@@ -25,11 +25,8 @@
                     <img v-for="image in images" v-bind:src="image" alt="an image" class="image"/>
                 </form>
         </header>
+
         <main id="main">
-
-            
-
-
             <div class="imgCanvas">
                 <div class="imgCard" v-for="img in imageRows" @click="this.imageId=img.id" >
                     <img v-bind:src="img.url" class="imgImgage">

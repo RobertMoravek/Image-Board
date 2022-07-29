@@ -17,7 +17,6 @@ const app = Vue.createApp({
         },
         onFormSubmit(e) {
             // e.preventDefault; instead do it in the html
-            console.log('form submit stopped');
             const form = e.currentTarget;
             const fileInput = form.querySelector("input[type=file]");
             if (fileInput.files.length < 1) {
@@ -32,10 +31,10 @@ const app = Vue.createApp({
                 .then((result) => {
                     return result.json();
                 })
-                .then((result) => {
-                    this.message = result.message;
-                    if (result.url){
-                        this.imageRows.unshift({id: result.id, url: result.url, title: result.title, description: result.description, user: result.user});
+                .then(({message, imgInfo}) => {
+                    this.message = message;
+                    if (imgInfo.url){
+                        this.imageRows.unshift({id: imgInfo.id, url: imgInfo.url, title: imgInfo.title, description: imgInfo.description, user: imgInfo.user});
 
                     }
                 });
@@ -53,6 +52,24 @@ const app = Vue.createApp({
                 
             }
         },
+        loadMoreImages: function () {
+            let offsetId = this.imageRows[this.imageRows.length-1].id;
+            // console.log('last ID:', offsetId);
+            fetch(`/images/${offsetId}m`)
+                .then((result) => {
+                    // console.log(this.imageRows);
+                    return result.json();
+                })
+                .then((newImageRows) => {
+                    // console.log(newImageRows);
+                    for (let item of newImageRows) {
+                        item.created_at = item.created_at
+                            .slice(0, 16)
+                            .replace("T", " ");
+                    }
+                    this.imageRows.push(...newImageRows);
+                });
+        }
     },
     components: {
         "img-card-big": imgCardBig,
@@ -65,11 +82,18 @@ const app = Vue.createApp({
                 return imageRows.json();
             })
             .then((imageRows) => {
+                console.log(imageRows);
                 for (let item of imageRows){
                     item.created_at = item.created_at.slice(0, 16).replace("T", " ");
                 }
-                imageRows = imageRows.reverse();
                 this.imageRows = imageRows;
+            })
+            .then(() => {
+                setInterval(() => {
+                    if (window.scrollMaxY - window.scrollY < 1000) {
+                        this.loadMoreImages();
+                    }
+                }, 250);
             });
         
 

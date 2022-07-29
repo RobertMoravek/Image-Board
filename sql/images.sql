@@ -29,3 +29,12 @@ INSERT INTO images (url, username, title, description) VALUES (
     'To be or not to be',
     'That is the question.'
 );
+
+
+CREATE TABLE comments(
+    commentid SERIAL PRIMARY KEY,
+    imageid INTEGER NOT NULL,
+    comment VARCHAR NOT NULL,
+    username VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

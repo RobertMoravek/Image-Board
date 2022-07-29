@@ -11,15 +11,27 @@ app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
 app.get("/images/:id", (req, res) => {
-    db.getImages(req.params.id)
-        .then((imageResult) => {
-            // console.log(imageResult.rows);
-            res.json(imageResult.rows);
-            return;
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    if(req.params.id.endsWith("m")){
+        db.getImages(null, req.params.id.slice(0, -1))
+            .then((imageResult) => {
+                console.log(imageResult.rows);
+                res.json(imageResult.rows);
+                return;
+            })
+            .catch((err) => {
+                console.log("error in get /images/id with m", err);
+            });
+    } else {
+        db.getImages(req.params.id)
+            .then((imageResult) => {
+                // console.log(imageResult.rows);
+                res.json(imageResult.rows);
+                return;
+            })
+            .catch((err) => {
+                console.log("error in get /images/id without m", err);
+            });
+    }
     
 });
 
@@ -41,13 +53,58 @@ app.post("/images", uploader.single("uploadInput"), s3.upload, (req, res) => {
     if(req.file){
         let amazonUrl = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
         db.insertImage(amazonUrl, req.body.uploadTitle, req.body.uploadDescription, "tempUser")
-            .then(() => {
+            .then((result) => {
                 res.json({
                     success: true,
                     message: "File uploaded",
-                    url: amazonUrl,
-                    title: req.body.uploadTitle,
-                    description: req.body.uploadDescription,
+                    imgInfo: result.rows[0]
+                });
+            });
+    } else {
+        res.json({
+            success: false,
+            message: "Upload failed",
+        });
+    }
+});
+
+app.get("/comments/:id", (req, res) => {
+    if (req.params.id.endsWith("m")) {
+        // db.getImages(null, req.params.id.slice(0, -1))
+        //     .then((imageResult) => {
+        //         console.log(imageResult.rows);
+        //         res.json(imageResult.rows);
+        //         return;
+        //     })
+        //     .catch((err) => {
+        //         console.log("error in get /images/id with m", err);
+        //     });
+    } else {
+        db.getComments(req.params.id)
+            .then((commentResults) => {
+                // console.log(imageResult.rows);
+                res.json(commentResults.rows);
+                return;
+            })
+            .catch((err) => {
+                console.log("error in get /images/id without m", err);
+            });
+    }
+});
+
+app.post("/comments", (req, res) => {
+    console.log("req.body", req.body);
+    if (req.body.username && req.body.comment && req.body.imageId) {
+        db.insertComment(
+            req.body.imageId,
+            req.body.comment,
+            req.body.username
+        )  
+            .then((result) => {
+                res.json({
+                    success: true,
+                    message: "Comment posted",
+                    commentInfo: result.rows[0],
                 });
             });
     } else {
