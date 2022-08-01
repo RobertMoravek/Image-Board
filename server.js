@@ -67,6 +67,15 @@ app.post("/dbi", uploader.single("uploadInput"), s3.upload, (req, res) => {
     }
 });
 
+app.get("/delete/:id", (req, res) => {
+    db.deleteImage(req.params.id)
+        .then(() => {
+            console.log('deleted');
+            res.send("done");
+            return;
+        });
+});
+
 app.get("/comments/:id", (req, res) => {
     if (req.params.id.endsWith("m")) {
         // db.getImages(null, req.params.id.slice(0, -1))

@@ -74,6 +74,13 @@ const app = Vue.createApp({
         newImage: function (id) {
             this.imageId = id;
             console.log('this.imageId', this.imageId);
+        },
+        removeImage: function () {
+            for(let i=0; i < this.imageRows.length; i++){
+                console.log("bloub", this.imageRows[i]);
+                // if (this.imageRows[i].id == 52) {
+                // }
+            }
         }
     },
     components: {
@@ -95,7 +102,6 @@ const app = Vue.createApp({
         if (location.pathname.indexOf("/img/") == 0) {
             tempId = +location.pathname.substring(5);
         }
-        console.log(tempId);
         if (tempId != isNaN) {
             this.imageId = tempId;
         } 
@@ -106,7 +112,6 @@ const app = Vue.createApp({
                 return imageRows.json();
             })
             .then((imageRows) => {
-                console.log(imageRows);
                 for (let item of imageRows){
                     item.created_at = item.created_at.slice(0, 16).replace("T", " ");
                 }

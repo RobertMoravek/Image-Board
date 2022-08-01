@@ -43,3 +43,7 @@ module.exports.insertComment = (imageId, comment, username) => {
 module.exports.getComments = (imageId) => {
     return db.query(`SELECT * FROM comments WHERE imageid=$1`, [imageId]);
 };
+
+module.exports.deleteImage = (imageId) => {
+    return db.query(`DELETE FROM images WHERE id=$1`, [imageId]);
+};

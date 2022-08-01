@@ -27,6 +27,14 @@ const imgCardBig = {
         forceRerender: function () {
             this.key++;
         },
+        deleteImage: function () {
+            fetch(`/delete/${this.imgId}`)
+                .then(() => {
+                    console.log('nach then');
+                    this.$emit("delete", this.imgId);
+                    this.closeImgCardBig();
+                });
+        },
     },
     template: `
     <div class="imgCardBig" @click.self="closeImgCardBig">
@@ -38,10 +46,11 @@ const imgCardBig = {
                 <div class="closeCross" @click="closeImgCardBig">×</div>
             </div>
             <div class="imgInfo">
-                <p class="imgTitle"> {{img.title}} </p>
-                <p class="imgDescription"> {{img.description}} </p>
-                <p class="imgUser">by {{img.username}} </p>
-                <p class="imgTime"> {{img.created_at}} </p>
+            <p class="imgTitle"> {{img.title}} </p>
+            <p class="imgDescription"> {{img.description}} </p>
+            <p class="imgUser">by {{img.username}} </p>
+            <p class="imgTime"> {{img.created_at}} </p>
+            <p class="delete" @click="deleteImage">Delete</p>
             </div>
             <comments v-if="this.imgId" :id="this.commentImgId" :key="key"></comments>
         </div>

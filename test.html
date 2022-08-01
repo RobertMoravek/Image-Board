@@ -1,21 +1,21 @@
     <div class="imgCardBig" @click.self="closeImgCardBig">
         <div class="imgBox">
             <div class="imgContainer">
-                <div class="prevArrow" @click="newImage(this.previousImage)">◁</div>
+                <div class="prevArrow" @click="this.imgId = this.prev">◁</div>
                 <img v-bind:src="img.url" class="imgImgage" id="bigImg">
-                <div class="nextArrow" @click="newImage(this.nextImage)">▷</div>
+                <div class="nextArrow" @click="this.imgId = this.next">▷</div>
                 <div class="closeCross" @click="closeImgCardBig">×</div>
             </div>
+            <p class="delete" @click="deleteImage">Delete</p>
             <div class="imgInfo">
                 <p class="imgTitle"> {{img.title}} </p>
                 <p class="imgDescription"> {{img.description}} </p>
                 <p class="imgUser">by {{img.username}} </p>
                 <p class="imgTime"> {{img.created_at}} </p>
             </div>
-            <comments :id="id"></comments>
+            <comments v-if="this.imgId" :id="this.commentImgId" :key="key"></comments>
         </div>
     </div>
-
 
 <div id="comments">
     <h3>Comments</h3>
