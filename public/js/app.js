@@ -5,16 +5,13 @@ const app = Vue.createApp({
     data: function () {
         return {
             imageRows: [],
-            images: [],
             message: "",
             imageId: 0,
+            images: []
         };
     },
     methods: {
 
-        test: function () {
-            console.log('event received');
-        },
         onFormSubmit(e) {
             // e.preventDefault; instead do it in the html
             const form = e.currentTarget;
@@ -24,7 +21,7 @@ const app = Vue.createApp({
                 return;
             }
             const formData = new FormData(form);
-            fetch("/images", {
+            fetch("/dbi", {
                 method: "post",
                 body: formData,
             })
@@ -55,7 +52,7 @@ const app = Vue.createApp({
         loadMoreImages: function () {
             let offsetId = this.imageRows[this.imageRows.length-1].id;
             // console.log('last ID:', offsetId);
-            fetch(`/images/${offsetId}m`)
+            fetch(`/dbi/${offsetId}m`)
                 .then((result) => {
                     // console.log(this.imageRows);
                     return result.json();
@@ -69,14 +66,41 @@ const app = Vue.createApp({
                     }
                     this.imageRows.push(...newImageRows);
                 });
+        },
+        changeUrl: function (imgId) {
+            this.imageId = imgId;
+            history.pushState(null, null, `/img/${imgId}`);
+        },
+        newImage: function (id) {
+            this.imageId = id;
+            console.log('this.imageId', this.imageId);
         }
     },
     components: {
         "img-card-big": imgCardBig,
     },
-
+    computed: {
+        checkImageId: function () {
+            if (!this.imageId) {
+                return false;
+            } else {
+                return true;
+            }
+            
+        }
+    },
     mounted: function () {
-        fetch("/images")
+        let tempId;
+
+        if (location.pathname.indexOf("/img/") == 0) {
+            tempId = +location.pathname.substring(5);
+        }
+        console.log(tempId);
+        if (tempId != isNaN) {
+            this.imageId = tempId;
+        } 
+
+        fetch("/dbi")
             .then((imageRows) => {
                 // console.log(imageRows);
                 return imageRows.json();
@@ -95,7 +119,20 @@ const app = Vue.createApp({
                     }
                 }, 250);
             });
+
         
+        
+        addEventListener("popstate", (e) => {
+            console.log(location.pathname, e.state);
+            let tempId;
+            if (location.pathname.indexOf("/img/") == 0){
+                tempId = +location.pathname.substring(5);
+            }
+            console.log(tempId);
+            if(tempId != isNaN){
+                this.imageId = tempId;
+            } 
+        });
 
     }
 });

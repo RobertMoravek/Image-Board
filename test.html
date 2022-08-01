@@ -1,13 +1,18 @@
     <div class="imgCardBig" @click.self="closeImgCardBig">
         <div class="imgBox">
-            <img v-bind:src="img.url" class="imgImgage" id="bigImg">
+            <div class="imgContainer">
+                <div class="prevArrow" @click="newImage(this.previousImage)">◁</div>
+                <img v-bind:src="img.url" class="imgImgage" id="bigImg">
+                <div class="nextArrow" @click="newImage(this.nextImage)">▷</div>
+                <div class="closeCross" @click="closeImgCardBig">×</div>
+            </div>
             <div class="imgInfo">
                 <p class="imgTitle"> {{img.title}} </p>
                 <p class="imgDescription"> {{img.description}} </p>
                 <p class="imgUser">by {{img.username}} </p>
                 <p class="imgTime"> {{img.created_at}} </p>
             </div>
-            <comments></comments>
+            <comments :id="id"></comments>
         </div>
     </div>
 

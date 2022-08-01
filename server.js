@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
-app.get("/images/:id", (req, res) => {
+app.get("/dbi/:id", (req, res) => {
     if(req.params.id.endsWith("m")){
         db.getImages(null, req.params.id.slice(0, -1))
             .then((imageResult) => {
@@ -20,11 +20,10 @@ app.get("/images/:id", (req, res) => {
             })
             .catch((err) => {
                 console.log("error in get /images/id with m", err);
-            });
+            }); 
     } else {
         db.getImages(req.params.id)
             .then((imageResult) => {
-                // console.log(imageResult.rows);
                 res.json(imageResult.rows);
                 return;
             })
@@ -35,10 +34,10 @@ app.get("/images/:id", (req, res) => {
     
 });
 
-app.get("/images", (req, res) => {
+app.get("/dbi", (req, res) => {
     db.getImages()
         .then((imageResult) => {
-            // console.log(imageResult.rows);
+            console.log(imageResult.rows);
             res.json(imageResult.rows);
             return;
         })
@@ -47,7 +46,7 @@ app.get("/images", (req, res) => {
         });
 });
 
-app.post("/images", uploader.single("uploadInput"), s3.upload, (req, res) => {
+app.post("/dbi", uploader.single("uploadInput"), s3.upload, (req, res) => {
     console.log('req.body', req.body);
     console.log('req.file', req.file);
     if(req.file){

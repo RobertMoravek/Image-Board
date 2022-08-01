@@ -30,6 +30,7 @@ h1 {
 
 #bored {
     width: 300px;
+    user-select: none;
 }
 
 h3 {
@@ -192,13 +193,86 @@ input {
     max-width: 90%;
     height: auto;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+    overflow-x: hidden;
     border: 2px solid white;
     margin-top: 5rem;
     background-color: rgb(0, 19, 36, 0.85);
+    margin-right: -1rem;
 
 
+}
+
+
+.imgContainer{
+    max-width: 100%;
+    height: auto;
+    max-height: 90%;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+.prevArrow, .nextArrow{
+    font-size: 2rem;
+    font-weight: 600;
+    z-index: 100;
+    cursor: pointer;
+    transition: 0.2s transform, opacity ease-in;
+    text-shadow: 3px 3px 4px #000000;
+    opacity: 50%;
+    position: absolute;
+    height: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+
+}
+
+.prevArrow{
+    padding: 0 2rem;
+}
+
+.nextArrow{
+    right: 0;
+    padding: 0 2rem;
+
+
+}
+
+.prevArrow:hover{
+    opacity: 75%;
+    transform: translateY(-50%) scale(125%) ;
+    transition: 0.2s transform, opacity ease-in;
+}
+.nextArrow:hover{
+
+    opacity: 75%;
+    transform: translateY(-50%) scale(125%) ;
+    transition: 0.2s transform, opacity ease-in;
+}
+
+.closeCross{
+    font-size: 3rem;
+    font-weight: 600;
+    z-index: 100;
+    cursor: pointer;
+    transition: 0.2s transform, opacity ease-in;
+    text-shadow: 3px 3px 4px #000000;
+    opacity: 50%;
+    position: absolute;
+    height: 75px;
+    width: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 0;
+}
+
+.closeCross:hover {
+    opacity: 75%;
+    transform: scale(125%);
+    transition: 0.2s transform, opacity ease-in;
 }
 
 .imgInfo {
@@ -229,7 +303,7 @@ input {
     object-fit: contain;
     /* height: 100%; */
     max-width: 100%;
-    max-height: 90%;
+    max-height: 100%;
     /* border: 2px solid white; */
 }
 
@@ -292,8 +366,6 @@ input {
     align-items: flex-start;
     padding: 2rem 0;;
 }
-
-
 
 
 @media screen and (max-width: 700px) {

@@ -61,6 +61,7 @@ const comments = {
         },
     },
     mounted: function () {
+        this.commentRows = [];
         fetch(`/comments/${this.id}`)
             .then((commentRows) => {
                 return commentRows.json();
