@@ -30,11 +30,12 @@ const imgCardBig = {
         deleteImage: function () {
             fetch(`/delete/${this.imgId}`)
                 .then(() => {
-                    console.log('nach then');
                     this.$emit("delete", this.imgId);
+                    console.log('nach then');
                     this.closeImgCardBig();
                 });
         },
+
     },
     template: `
     <div class="imgCardBig" @click.self="closeImgCardBig">

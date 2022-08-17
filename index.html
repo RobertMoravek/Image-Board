@@ -26,8 +26,8 @@
                 </form>
         </header>
 
-        <main id="main">
-            <div class="imgCanvas">
+        <main id="main">  
+            <div class="imgCanvas" >
                 <div class="imgCard" v-for="img in imageRows" @click="changeUrl(img.id)"  >
                     <img v-bind:src="img.url" class="imgImgage">
                     <div class="imgInfo">
@@ -36,8 +36,9 @@
                     </div>
                 </div>
             </div>
-            <img-card-big v-if="this.imageId" :id="imageId" @close="this.imageId=0" @new="newImage"></img-card-big>
+            <img-card-big v-if="this.imageId" :id="imageId" @close="this.imageId=0" @new="newImage" @delete="printArray"></img-card-big>
         </main>
+
         </div>
         
         <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>

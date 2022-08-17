@@ -7,11 +7,10 @@ const app = Vue.createApp({
             imageRows: [],
             message: "",
             imageId: 0,
-            images: []
+            images: [],
         };
     },
     methods: {
-
         onFormSubmit(e) {
             // e.preventDefault; instead do it in the html
             const form = e.currentTarget;
@@ -28,29 +27,31 @@ const app = Vue.createApp({
                 .then((result) => {
                     return result.json();
                 })
-                .then(({message, imgInfo}) => {
+                .then(({ message, imgInfo }) => {
                     this.message = message;
-                    if (imgInfo.url){
-                        this.imageRows.unshift({id: imgInfo.id, url: imgInfo.url, title: imgInfo.title, description: imgInfo.description, user: imgInfo.user});
-
+                    if (imgInfo.url) {
+                        this.imageRows.unshift({
+                            id: imgInfo.id,
+                            url: imgInfo.url,
+                            title: imgInfo.title,
+                            description: imgInfo.description,
+                            user: imgInfo.user,
+                        });
                     }
                 });
         },
-        uploadExpander: function (e){
-            if (e.currentTarget.parentNode.classList.contains("expanded")){
+        uploadExpander: function (e) {
+            if (e.currentTarget.parentNode.classList.contains("expanded")) {
                 e.currentTarget.parentNode.classList.remove("expanded");
                 e.currentTarget.childNodes[1].classList.remove("arrowUp");
-
             } else {
                 e.currentTarget.parentNode.classList.add("expanded");
                 e.currentTarget.childNodes[1].classList.add("arrowUp");
                 console.log(e.currentTarget.childNodes);
-                
-                
             }
         },
         loadMoreImages: function () {
-            let offsetId = this.imageRows[this.imageRows.length-1].id;
+            let offsetId = this.imageRows[this.imageRows.length - 1].id;
             // console.log('last ID:', offsetId);
             fetch(`/dbi/${offsetId}m`)
                 .then((result) => {
@@ -73,15 +74,19 @@ const app = Vue.createApp({
         },
         newImage: function (id) {
             this.imageId = id;
-            console.log('this.imageId', this.imageId);
+            console.log("this.imageId", this.imageId);
         },
-        removeImage: function () {
-            for(let i=0; i < this.imageRows.length; i++){
-                console.log("bloub", this.imageRows[i]);
-                // if (this.imageRows[i].id == 52) {
-                // }
-            }
-        }
+        removeImage: function (id) {
+            console.log("removeImage running, id:", id);
+            let result = this.imageRows.filter((item) => item.id != id);
+            this.imageRows = result;
+        },
+        printArray: function (deletedId) {
+            console.log('trying to filter');
+            let result = this.imageRows.filter(item => item.id != deletedId);
+            this.imageRows = result;
+            console.log(this.imageRows);
+        },
     },
     components: {
         "img-card-big": imgCardBig,
@@ -93,8 +98,7 @@ const app = Vue.createApp({
             } else {
                 return true;
             }
-            
-        }
+        },
     },
     mounted: function () {
         let tempId;
@@ -104,7 +108,7 @@ const app = Vue.createApp({
         }
         if (tempId != isNaN) {
             this.imageId = tempId;
-        } 
+        }
 
         fetch("/dbi")
             .then((imageRows) => {
@@ -112,8 +116,10 @@ const app = Vue.createApp({
                 return imageRows.json();
             })
             .then((imageRows) => {
-                for (let item of imageRows){
-                    item.created_at = item.created_at.slice(0, 16).replace("T", " ");
+                for (let item of imageRows) {
+                    item.created_at = item.created_at
+                        .slice(0, 16)
+                        .replace("T", " ");
                 }
                 this.imageRows = imageRows;
             })
@@ -125,21 +131,18 @@ const app = Vue.createApp({
                 }, 250);
             });
 
-        
-        
         addEventListener("popstate", (e) => {
             console.log(location.pathname, e.state);
             let tempId;
-            if (location.pathname.indexOf("/img/") == 0){
+            if (location.pathname.indexOf("/img/") == 0) {
                 tempId = +location.pathname.substring(5);
             }
             console.log(tempId);
-            if(tempId != isNaN){
+            if (tempId != isNaN) {
                 this.imageId = tempId;
-            } 
+            }
         });
-
-    }
+    },
 });
 
 app.mount("#bodydiv");
