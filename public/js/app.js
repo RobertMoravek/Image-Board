@@ -8,11 +8,16 @@ const app = Vue.createApp({
             message: "",
             imageId: 0,
             images: [],
+            uploading: false,
+            uploadComplete: false,
+            title: "",
+            description: "",
         };
     },
     methods: {
         onFormSubmit(e) {
-            // e.preventDefault; instead do it in the html
+            this.uploading = true;
+
             const form = e.currentTarget;
             const fileInput = form.querySelector("input[type=file]");
             if (fileInput.files.length < 1) {
@@ -28,8 +33,10 @@ const app = Vue.createApp({
                     return result.json();
                 })
                 .then(({ message, imgInfo }) => {
+                    this.uploading = false;
                     this.message = message;
                     if (imgInfo.url) {
+                        this.uploadComplete = true;
                         this.imageRows.unshift({
                             id: imgInfo.id,
                             url: imgInfo.url,
@@ -37,6 +44,16 @@ const app = Vue.createApp({
                             description: imgInfo.description,
                             user: imgInfo.user,
                         });
+                        setTimeout(() => {
+                            document.getElementById("uploadForm").classList.remove("expanded");
+                            document.getElementById("arrowDown").classList.remove("arrowUp");
+                            setTimeout(() => {
+                                this.message = "";
+                                this.title = "";
+                                this.description = "";
+                                this.uploadComplete = false;
+                            }, 1000);
+                        }, 2000);
                     }
                 });
         },
@@ -87,6 +104,9 @@ const app = Vue.createApp({
             this.imageRows = result;
             console.log(this.imageRows);
         },
+        scrollToTop: function() {
+            window.scroll({ top: 0, left: 0, behavior: "smooth" });
+        }
     },
     components: {
         "img-card-big": imgCardBig,

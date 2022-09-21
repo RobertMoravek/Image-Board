@@ -10,19 +10,26 @@
     <body id="body">
         <div id="bodydiv">
             <header>
-                <h1 id="bored">Bored of your images 🥱</h1>
-                <form action="/images" method="post" enctype="multipart/form-data" @submit.prevent="onFormSubmit" class="uploadForm">
-                    <h3 class="uploadHeadline" id="uploadExpander" v-on:click="uploadExpander">Upload an image<span class="arrowDown"></span></h3>
-                    <label for="uploadInput">Image</label>
+                <h1 id="bored" @click="scrollToTop">Bored of your images 🥱</h1>
+                <!-- Prevent normal submit and run own submit function instead -->
+                <form action="/images" method="post" enctype="multipart/form-data" @submit.prevent="onFormSubmit" class="uploadForm" id="uploadForm">
+                    <div id="loading-bg" v-if="uploading">
+                        <div id="loading-spinner"></div>
+                    </div>
+                    <!-- UploadExpander changes the class of the uploader, revealing all its fields -->
+                    <h3 class="uploadHeadline" id="uploadExpander" v-on:click="uploadExpander">Upload an image<span class="arrowDown" id="arrowDown"></span></h3>
+                    <label for="uploadInput" v-if="message == ''">Image</label>
                     <input type="file" name="uploadInput" id="uploadInput" v-if="message == ''">
-                    <label for="uploadTitle">Title</label>
-                    <input type="text" name="uploadTitle" id="uploadTitle" placeholder="My image" v-if="message == ''">
-                    <label for="uploadDescription">Description</label>                
-                    <input type="text" name="uploadDescription" id="uploadDescription" placeholder="Look at it!" v-if="message == ''">
+                    <label for="uploadTitle" v-if="message == ''">Title</label>
+                    <input v-model="title" type="text" name="uploadTitle" id="uploadTitle" placeholder="My image" v-if="message == ''">
+                    <h3 v-if="uploadComplete">{{title}}</h3>
+                    <label for="uploadDescription" v-if="message == ''">Description</label>                
+                    <input v-model="description" type="text" name="uploadDescription" id="uploadDescription" placeholder="Look at it!" v-if="message == ''">
+                    <p v-if="uploadComplete">{{description}}</p>
                     <input type="submit" value="Upload" class="submitButton" v-if="message == ''">
                     <div class="status green" v-if="message == 'File uploaded'">{{message}}</div>
                     <div class="status red" v-if="message == 'Upload failed'">{{message}}</div>
-                    <img v-for="image in images" v-bind:src="image" alt="an image" class="image"/>
+                    <!-- <img v-for="image in images" v-bind:src="image" alt="an image" class="image"/> -->
                 </form>
         </header>
 
