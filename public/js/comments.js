@@ -17,7 +17,7 @@ const comments = {
         <p class="commentTime">{{comment.created_at}}</p>
     </div>
     <div class="newComment">
-        <p id="leaveAComment">Leave a comment!</p>
+        <h3 id="leaveAComment">Leave a comment!</h3>
         <label for="username">Your name:</label>
         <input type="text" name="username" id="username" v-model="username">
         <label for="newComment">Comment:</label>

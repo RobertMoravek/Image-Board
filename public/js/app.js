@@ -135,6 +135,8 @@ const app = Vue.createApp({
                 document.getElementById("header").classList.remove("offscreen");
             } else {
                 document.getElementById("header").classList.add("offscreen");
+                document.getElementById("uploadForm").classList.remove("expanded");
+                document.getElementById("arrowDown").classList.remove("arrowUp");
             }
             prevScrollpos = currentScrollPos;
         }; 
@@ -170,7 +172,7 @@ const app = Vue.createApp({
                 }, 250);
             });
 
-        addEventListener("popstate", (e) => {
+        addEventListener("popstate", () => {
             let tempId;
             if (location.pathname.indexOf("/img/") == 0) {
                 tempId = +location.pathname.substring(5);

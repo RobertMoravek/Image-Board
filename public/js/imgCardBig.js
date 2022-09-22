@@ -36,13 +36,15 @@ const imgCardBig = {
             });
         },
         imageLoaded: function () {
+            console.log('setting img loaded falase');
             this.imageLoading = false;
         },
     },
     template: `
-    <div class="imgCardBig" @click.self="closeImgCardBig">
+    <div class="imgCardBig">
         <div class="imgBox">
             <div class="imgContainer">
+            <h1 v-if="imageLoading">Loading</h1>
                 <div id="loading-bg-opaque" v-if="imageLoading">
                     <div id="loading-spinner"></div>
                 </div>
@@ -94,10 +96,10 @@ const imgCardBig = {
             return this.imgId;
         },
     },
-    
-    
+
     mounted: function () {
-        
+        this.imageLoading = true;
+        document.getElementById("body").classList.add("noscroll");
         fetch(`/dbi/${this.id}`)
             .then((imageRows) => {
                 // console.log(imageRows);
@@ -115,6 +117,11 @@ const imgCardBig = {
                 this.prev = imageRows[0].prev;
                 this.next = imageRows[0].next;
             });
+    },
+
+    unmounted: function () {
+        this.imageLoading = true;
+        document.getElementById("body").classList.remove("noscroll");
     },
 };
 
