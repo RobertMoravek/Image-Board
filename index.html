@@ -9,7 +9,7 @@
     </head>
     <body id="body">
         <div id="bodydiv">
-            <header>
+            <header id="header">
                 <h1 id="bored" @click="scrollToTop">Bored of your images 🥱</h1>
                 <!-- Prevent normal submit and run own submit function instead -->
                 <form action="/images" method="post" enctype="multipart/form-data" @submit.prevent="onFormSubmit" class="uploadForm" id="uploadForm">

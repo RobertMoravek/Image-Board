@@ -28,8 +28,12 @@ const imgCardSmall = {
     `,
 
     mounted: function () {
-
+        this.imageLoading = true;
     },
+
+    unmounted: function () {
+        this.imageLoading = true;
+    }
 };
 
 export default imgCardSmall;

@@ -14,6 +14,7 @@ const app = Vue.createApp({
             title: "",
             description: "",
             imageLoading: true,
+            scrollBottomChecker: undefined,
         };
     },
     methods: {
@@ -79,6 +80,9 @@ const app = Vue.createApp({
                 })
                 .then((newImageRows) => {
                     // console.log(newImageRows);
+                    if (newImageRows.length == 0) {
+                        clearInterval(this.scrollBottomChecker);
+                    }
                     for (let item of newImageRows) {
                         item.created_at = item.created_at
                             .slice(0, 16)
@@ -124,6 +128,18 @@ const app = Vue.createApp({
         },
     },
     mounted: function () {
+        var prevScrollpos = window.pageYOffset;
+        window.onscroll = function () {
+            var currentScrollPos = window.pageYOffset;
+            if (prevScrollpos > currentScrollPos) {
+                document.getElementById("header").classList.remove("offscreen");
+            } else {
+                document.getElementById("header").classList.add("offscreen");
+            }
+            prevScrollpos = currentScrollPos;
+        }; 
+
+
         let tempId;
 
         if (location.pathname.indexOf("/img/") == 0) {
@@ -147,7 +163,7 @@ const app = Vue.createApp({
                 this.imageRows = imageRows;
             })
             .then(() => {
-                setInterval(() => {
+                this.scrollBottomChecker = setInterval(() => {
                     if (window.scrollMaxY - window.scrollY < 1000) {
                         this.loadMoreImages();
                     }
@@ -155,7 +171,6 @@ const app = Vue.createApp({
             });
 
         addEventListener("popstate", (e) => {
-            console.log(location.pathname, e.state);
             let tempId;
             if (location.pathname.indexOf("/img/") == 0) {
                 tempId = +location.pathname.substring(5);
