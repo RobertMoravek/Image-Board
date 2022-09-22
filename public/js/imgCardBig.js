@@ -8,6 +8,7 @@ const imgCardBig = {
             prev: null,
             next: null,
             key: 0,
+            imageLoading: true,
         };
     },
     props: ["id"],
@@ -28,21 +29,25 @@ const imgCardBig = {
             this.key++;
         },
         deleteImage: function () {
-            fetch(`/delete/${this.imgId}`)
-                .then(() => {
-                    this.$emit("delete", this.imgId);
-                    console.log('nach then');
-                    this.closeImgCardBig();
-                });
+            fetch(`/delete/${this.imgId}`).then(() => {
+                this.$emit("delete", this.imgId);
+                console.log("nach then");
+                this.closeImgCardBig();
+            });
         },
-
+        imageLoaded: function () {
+            this.imageLoading = false;
+        },
     },
     template: `
     <div class="imgCardBig" @click.self="closeImgCardBig">
         <div class="imgBox">
             <div class="imgContainer">
+                <div id="loading-bg-opaque" v-if="imageLoading">
+                    <div id="loading-spinner"></div>
+                </div>
                 <div class="prevArrow" @click="this.imgId = this.prev">◁</div>
-                <img v-bind:src="img.url" class="imgImgage" id="bigImg">
+                <img v-bind:src="img.url" class="imgImgage" id="bigImg" @load="imageLoaded">
                 <div class="nextArrow" @click="this.imgId = this.next">▷</div>
                 <div class="closeCross" @click="closeImgCardBig">×</div>
             </div>
@@ -89,8 +94,10 @@ const imgCardBig = {
             return this.imgId;
         },
     },
+    
+    
     mounted: function () {
-        console.log("mounted component");
+        
         fetch(`/dbi/${this.id}`)
             .then((imageRows) => {
                 // console.log(imageRows);

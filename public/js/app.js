@@ -1,5 +1,6 @@
 import * as Vue from './vue.js';
 import imgCardBig from "./imgCardBig.js";
+import imgCardSmall from './imgCardSmall.js';
 
 const app = Vue.createApp({
     data: function () {
@@ -12,6 +13,7 @@ const app = Vue.createApp({
             uploadComplete: false,
             title: "",
             description: "",
+            imageLoading: true,
         };
     },
     methods: {
@@ -110,6 +112,7 @@ const app = Vue.createApp({
     },
     components: {
         "img-card-big": imgCardBig,
+        "img-card-small": imgCardSmall
     },
     computed: {
         checkImageId: function () {
