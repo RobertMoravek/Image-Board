@@ -165,7 +165,7 @@ const app = Vue.createApp({
             })
             .then(() => {
                 this.scrollBottomChecker = setInterval(() => {
-                    if (window.scrollMaxY - window.scrollY < 1000) {
+                    if (document.body.scrollHeight - window.scrollY < 1000) {
                         this.loadMoreImages();
                     }
                 }, 250);
