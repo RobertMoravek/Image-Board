@@ -7,7 +7,6 @@ const imgCardBig = {
             imgId: null,
             prev: null,
             next: null,
-            key: 0,
             imageLoading: true,
             hal9000: false,
         };
@@ -85,8 +84,8 @@ const imgCardBig = {
                     }
                     this.img = imageRows[0];
                     this.imgId = imageRows[0].id;
-                    this.prev = imageRows[0].prev;
-                    this.next = imageRows[0].next;
+                    this.next = imageRows[0].prev;
+                    this.prev = imageRows[0].next;
                     history.pushState(null, null, "/img/"+ this.imgId);
                     // this.forceRerender();
                 });
