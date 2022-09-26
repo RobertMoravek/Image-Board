@@ -1,3 +1,4 @@
+
 const comments = {
     data: function () {
         return {
@@ -35,7 +36,7 @@ const comments = {
                 imageId: this.id,
             };
             bodyObj = JSON.stringify(bodyObj);
-            console.log(bodyObj);
+            bodyObj;
             fetch("/comments", {
                 method: "post",
                 headers: { "Content-Type": "application/json" },
@@ -46,7 +47,7 @@ const comments = {
                 })
                 .then(({ message, commentInfo }) => {
                     this.message = message;
-                    console.log('commentInfo', commentInfo);
+                    // console.log("commentInfo", commentInfo);
                     commentInfo.created_at = commentInfo.created_at
                         .slice(0, 16)
                         .replace("T", " ");
@@ -60,6 +61,26 @@ const comments = {
                 });
         },
     },
+
+    watch: {
+        id: function () {
+            this.commentRows = [];
+            fetch(`/comments/${this.id}`)
+                .then((commentRows) => {
+                    return commentRows.json();
+                })
+                .then((commentRows) => {
+                    // console.log(commentRows);
+                    for (let item of commentRows) {
+                        item.created_at = item.created_at
+                            .slice(0, 16)
+                            .replace("T", " ");
+                    }
+                    this.commentRows = commentRows;
+                });
+        },
+
+    },
     mounted: function () {
         this.commentRows = [];
         fetch(`/comments/${this.id}`)
@@ -67,7 +88,7 @@ const comments = {
                 return commentRows.json();
             })
             .then((commentRows) => {
-                console.log(commentRows);
+                // console.log(commentRows);
                 for (let item of commentRows) {
                     item.created_at = item.created_at
                         .slice(0, 16)

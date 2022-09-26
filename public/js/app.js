@@ -67,7 +67,7 @@ const app = Vue.createApp({
             } else {
                 e.currentTarget.parentNode.classList.add("expanded");
                 e.currentTarget.childNodes[1].classList.add("arrowUp");
-                console.log(e.currentTarget.childNodes);
+                // console.log(e.currentTarget.childNodes);
             }
         },
         loadMoreImages: function () {
@@ -95,20 +95,19 @@ const app = Vue.createApp({
             this.imageId = imgId;
             history.pushState(null, null, `/img/${imgId}`);
         },
-        newImage: function (id) {
-            this.imageId = id;
-            console.log("this.imageId", this.imageId);
-        },
+        // newImage: function (id) {
+        //     console.log('new image');
+        //     this.imageId = id;
+        //     this.changeUrl(id);
+        // },
         removeImage: function (id) {
-            console.log("removeImage running, id:", id);
             let result = this.imageRows.filter((item) => item.id != id);
             this.imageRows = result;
         },
-        printArray: function (deletedId) {
-            console.log('trying to filter');
+        updateArray: function (deletedId) {
             let result = this.imageRows.filter(item => item.id != deletedId);
             this.imageRows = result;
-            console.log(this.imageRows);
+            // console.log(this.imageRows);
         },
         scrollToTop: function() {
             window.scroll({ top: 0, left: 0, behavior: "smooth" });
@@ -118,15 +117,15 @@ const app = Vue.createApp({
         "img-card-big": imgCardBig,
         "img-card-small": imgCardSmall
     },
-    computed: {
-        checkImageId: function () {
-            if (!this.imageId) {
-                return false;
-            } else {
-                return true;
-            }
-        },
-    },
+    // computed: {
+    //     checkImageId: function () {
+    //         if (!this.imageId) {
+    //             return false;
+    //         } else {
+    //             return true;
+    //         }
+    //     },
+    // },
     mounted: function () {
         var prevScrollpos = window.pageYOffset;
         window.onscroll = function () {
@@ -177,7 +176,7 @@ const app = Vue.createApp({
             if (location.pathname.indexOf("/img/") == 0) {
                 tempId = +location.pathname.substring(5);
             }
-            console.log(tempId);
+            // console.log(tempId);
             if (tempId != isNaN) {
                 this.imageId = tempId;
             }

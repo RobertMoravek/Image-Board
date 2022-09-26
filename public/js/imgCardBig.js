@@ -18,17 +18,9 @@ const imgCardBig = {
             history.pushState(null, null, "/");
             this.$emit("close");
         },
-        prevImage: function () {
-            console.log("this.prev", this.prev);
-            this.$emit("new", this.prev);
-        },
-        nextImage: function () {
-            console.log("this.next", this.next);
-            this.$emit("new", this.next);
-        },
-        forceRerender: function () {
-            this.key++;
-        },
+        // forceRerender: function () {
+        //     this.key++;
+        // },
         deleteImage: function () {
             // fetch(`/delete/${this.imgId}`).then(() => {
             //     this.$emit("delete", this.imgId);
@@ -59,9 +51,9 @@ const imgCardBig = {
                 <div id="loading-bg-opaque" v-if="imageLoading">
                     <div id="loading-spinner"></div>
                 </div>
-                <div class="prevArrow" @click="this.imgId = this.prev">◁</div>
+                <div class="prevArrow" @click="this.imgId = this.prev" v-if="this.prev">◁</div>
                 <img v-bind:src="img.url" class="imgImgage" id="bigImg" @load="imageLoaded">
-                <div class="nextArrow" @click="this.imgId = this.next">▷</div>
+                <div class="nextArrow" @click="this.imgId = this.next" v-if="this.next">▷</div>
                 <div class="closeCross" @click="closeImgCardBig">×</div>
             </div>
             <div class="imgInfo">
@@ -71,21 +63,21 @@ const imgCardBig = {
             <p class="imgTime"> {{img.created_at}} </p>
             <p class="delete" @click="deleteImage">Delete</p>
             </div>
-            <comments v-if="this.imgId" :id="this.commentImgId" :key="key"></comments>
+            <comments v-if="this.imgId" :id="this.imgId"></comments>
         </div>
     </div>
     `,
 
     watch: {
         imgId: function () {
-            console.log(this.imgId);
+            // console.log(this.imgId);
             fetch(`/dbi/${this.imgId}`)
                 .then((imageRows) => {
                     // console.log(imageRows);
                     return imageRows.json();
                 })
                 .then((imageRows) => {
-                    console.log("imageRows", imageRows);
+                    // console.log("imageRows", imageRows);
                     for (let item of imageRows) {
                         item.created_at = item.created_at
                             .slice(0, 16)
@@ -95,26 +87,20 @@ const imgCardBig = {
                     this.imgId = imageRows[0].id;
                     this.prev = imageRows[0].prev;
                     this.next = imageRows[0].next;
-                    this.forceRerender();
+                    history.pushState(null, null, "/img/"+ this.imgId);
+                    // this.forceRerender();
                 });
         },
-        // hal9000() {
-        //     this.$nextTick(() => {
-        //         console.log(document.getElementById("hal9000"));
-        //         document.getElementById("hal9000").classList.remove("transparent");
 
-        //     });
-
-        // }
     },
     components: {
         comments: comments,
     },
-    computed: {
-        commentImgId: function () {
-            return this.imgId;
-        },
-    },
+    // computed: {
+    //     commentImgId: function () {
+    //         return this.imgId;
+    //     },
+    // },
 
     mounted: function () {
         this.imageLoading = true;
@@ -125,7 +111,7 @@ const imgCardBig = {
                 return imageRows.json();
             })
             .then((imageRows) => {
-                console.log("imageRows", imageRows);
+                // console.log("imageRows", imageRows);
                 for (let item of imageRows) {
                     item.created_at = item.created_at
                         .slice(0, 16)
