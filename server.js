@@ -6,6 +6,15 @@ const path = require("path");
 const express = require("express");
 const app = express();
 
+
+if (process.env.NODE_ENV == "production") {
+    app.use((req, res, next) => {
+        if (req.headers["x-forwarded-proto"].startsWith("https")) {
+            return next();
+        }
+        res.redirect(`https://${req.hostname}${req.url}`);
+    });
+}
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "uploads")));
 
@@ -131,4 +140,4 @@ app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.listen(8080, () => console.log(`I'm listening on 8080.`));
+app.listen(process.env.PORT || 8080, () => console.log(`I'm listening on 8080.`));
