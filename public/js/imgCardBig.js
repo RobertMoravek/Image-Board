@@ -9,6 +9,7 @@ const imgCardBig = {
             next: null,
             key: 0,
             imageLoading: true,
+            hal9000: false,
         };
     },
     props: ["id"],
@@ -29,19 +30,29 @@ const imgCardBig = {
             this.key++;
         },
         deleteImage: function () {
-            fetch(`/delete/${this.imgId}`).then(() => {
-                this.$emit("delete", this.imgId);
-                console.log("nach then");
-                this.closeImgCardBig();
-            });
+            // fetch(`/delete/${this.imgId}`).then(() => {
+            //     this.$emit("delete", this.imgId);
+            //     console.log("nach then");
+            //     this.closeImgCardBig();
+            // });
+            this.hal9000 = true;
+        },
+        closeHAL9000: function () {
+            this.hal9000 = false; 
         },
         imageLoaded: function () {
-            console.log('setting img loaded falase');
             this.imageLoading = false;
         },
     },
+
     template: `
     <div class="imgCardBig">
+    <Transition>
+    <div v-if="hal9000" @click="closeHAL9000" class="hal9000" id="hal9000">
+        <img src="../HAL9000.svg" >
+        <h2>I'm sorry, Dave. I'm afraid I can't do that.</h2>
+    </div>
+    </Transition>
         <div class="imgBox">
             <div class="imgContainer">
             <h1 v-if="imageLoading">Loading</h1>
@@ -87,6 +98,14 @@ const imgCardBig = {
                     this.forceRerender();
                 });
         },
+        // hal9000() {
+        //     this.$nextTick(() => {
+        //         console.log(document.getElementById("hal9000"));
+        //         document.getElementById("hal9000").classList.remove("transparent");
+
+        //     });
+
+        // }
     },
     components: {
         comments: comments,
