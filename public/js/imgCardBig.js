@@ -50,7 +50,7 @@ const imgCardBig = {
     <Transition>
     <div v-if="hal9000" @click="closeHAL9000" class="hal9000" id="hal9000">
         <img src="../HAL9000.svg" >
-        <h2>I'm sorry, Dave. I'm afraid I can't do that.</h2>
+        <h2>I'm sorry, Dave.<br>I'm afraid I can't do that.</h2>
     </div>
     </Transition>
         <div class="imgBox">

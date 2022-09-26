@@ -486,6 +486,11 @@ input {
     z-index: 10000;
     gap: 2rem;
     cursor: pointer;
+    padding: 2rem;
+}
+
+.hal9000 h2 {
+    text-align: center;
 }
 
 .v-enter-active,
