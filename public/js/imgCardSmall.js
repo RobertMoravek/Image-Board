@@ -9,6 +9,7 @@ const imgCardSmall = {
     },
     props: ["img"],
     methods: {
+        // When image is loaded, turn off loading animation
         imageLoaded: function () {
             this.imageLoading = false;
         },
@@ -28,6 +29,7 @@ const imgCardSmall = {
     `,
 
     mounted: function () {
+        // start loading animation
         this.imageLoading = true;
     },
 

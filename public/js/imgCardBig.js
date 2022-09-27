@@ -13,24 +13,32 @@ const imgCardBig = {
     },
     props: ["id"],
     methods: {
+        // When big view is closed, reset url and emit close event to app.js
         closeImgCardBig: function () {
             history.pushState(null, null, "/");
             this.$emit("close");
         },
-        // forceRerender: function () {
-        //     this.key++;
-        // },
+
+        // When user clicks delete...
         deleteImage: function () {
+
+            // Actuall delete code (not in use for deployment)
             // fetch(`/delete/${this.imgId}`).then(() => {
             //     this.$emit("delete", this.imgId);
             //     console.log("nach then");
             //     this.closeImgCardBig();
             // });
+
+            // Activate HAL9000 ;-)
             this.hal9000 = true;
         },
+
+        // Close HL9000
         closeHAL9000: function () {
             this.hal9000 = false; 
         },
+
+        // When image has finished loading, set variable for loading animation to false
         imageLoaded: function () {
             this.imageLoading = false;
         },
@@ -68,6 +76,7 @@ const imgCardBig = {
     `,
 
     watch: {
+        // When the chosen imgId changes, fetch the corresponding image
         imgId: function () {
             // console.log(this.imgId);
             fetch(`/dbi/${this.imgId}`)
@@ -86,6 +95,7 @@ const imgCardBig = {
                     this.imgId = imageRows[0].id;
                     this.next = imageRows[0].prev;
                     this.prev = imageRows[0].next;
+                    // Set url for new image
                     history.pushState(null, null, "/img/"+ this.imgId);
                 });
         },
@@ -97,8 +107,11 @@ const imgCardBig = {
 
 
     mounted: function () {
+        // Activate loading animation and stop scrolling for background (canvas of all loaded images)
         this.imageLoading = true;
         document.getElementById("body").classList.add("noscroll");
+
+        // Fetch the chosen image
         fetch(`/dbi/${this.id}`)
             .then((imageRows) => {
                 // console.log(imageRows);
@@ -116,6 +129,7 @@ const imgCardBig = {
                     this.prev = imageRows[0].prev;
                     this.next = imageRows[0].next;
                 } else {
+                    // If an image could not be loaded, close the component and reset the url
                     this.$emit("close");
                     history.pushState(null, null, "/");
                 }
@@ -123,7 +137,7 @@ const imgCardBig = {
     },
 
     unmounted: function () {
-        this.imageLoading = true;
+        // On unmount, activate scrolling for image canvas again
         document.getElementById("body").classList.remove("noscroll");
     },
 };

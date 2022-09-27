@@ -108,6 +108,7 @@ main {
     overflow: hidden;
     transition: 0.5s;
     margin-top: 0.25rem;
+    padding: 0 1rem;
 }
 
 .expanded {

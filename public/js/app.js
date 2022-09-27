@@ -27,7 +27,7 @@ const app = Vue.createApp({
             if (this.fileTooLarge || this.fileTypeWrong ) {
                 return;
             }
-
+            // Same for empty title field
             if (!this.title) {
                 this.titleEmpty = true;
                 return;
@@ -35,7 +35,7 @@ const app = Vue.createApp({
                 this.titleEmpty = false;
             }
             
-            // Get the file
+            // Get the form
             const form = e.currentTarget;
             const fileInput = form.querySelector("input[type=file]");
             
@@ -45,7 +45,7 @@ const app = Vue.createApp({
                 return;
             }
 
-            // If everthing is alrigth, set ulpoading to true, thereby starting loading animation
+            // If everthing is alright, set ulpoading to true, thereby starting loading animation
             this.uploading = true;
 
             // Post the data to the server
@@ -58,7 +58,6 @@ const app = Vue.createApp({
                     return result.json();
                 })
                 .then(({ message, imgInfo }) => {
-                    console.log('printing message and imgInfo', message, imgInfo);
                     this.uploading = false;
                     this.message = message;
                     // If you get infos about the uploaded file back, create a new object in the imageRows with this info
@@ -85,6 +84,7 @@ const app = Vue.createApp({
                     }
                 })
                 .catch(() => {
+                    //  If the server encountred a problem, stop loading animation and set filetypewrong (most likely cause)
                     this.uploading = false;
                     this.fileTypeWrong = true;
                 });
@@ -97,10 +97,10 @@ const app = Vue.createApp({
             } else {
                 e.currentTarget.parentNode.classList.add("expanded");
                 e.currentTarget.childNodes[1].classList.add("arrowUp");
-                // console.log(e.currentTarget.childNodes);
             }
         },
-        // Immediately when a file is selected check its filesize and set a flag variable if too big
+
+        // Immediately when a file is selected check its size and type and set a flag if too big / wrong
         fileChecker: function (e) {
             if (e.target.files[0].size > 2097152) {
                 this.fileTooLarge = true;
@@ -117,17 +117,15 @@ const app = Vue.createApp({
             }
 
         },
+
         // Load more images, with the id of the last image as the offset
         loadMoreImages: function () {
             let offsetId = this.imageRows[this.imageRows.length - 1].id;
-            // console.log('last ID:', offsetId);
             fetch(`/dbi/${offsetId}m`)
                 .then((result) => {
-                    // console.log(this.imageRows);
                     return result.json();
                 })
                 .then((newImageRows) => {
-                    // console.log(newImageRows);
                     if (newImageRows.length == 0) {
                         clearInterval(this.scrollBottomChecker);
                     }
@@ -139,22 +137,26 @@ const app = Vue.createApp({
                     this.imageRows.push(...newImageRows);
                 });
         },
+
         // Change the url, if a imageId is set and an overlay with that image is displayed
         changeUrl: function (imgId) {
             this.imageId = imgId;
             history.pushState(null, null, `/img/${imgId}`);
         },
+
         // Remove a deleted image from the array of images to be displayed
         updateArray: function (deletedId) {
             let result = this.imageRows.filter(item => item.id != deletedId);
             this.imageRows = result;
             // console.log(this.imageRows);
         },
+
         // Scroll to top of page, if Logo is clicked
         scrollToTop: function() {
             window.scroll({ top: 0, left: 0, behavior: "smooth" });
         }
     },
+
     components: {
         "img-card-big": imgCardBig,
         "img-card-small": imgCardSmall
@@ -184,10 +186,9 @@ const app = Vue.createApp({
             this.imageId = tempId;
         }
 
-        // Fetch the 8 altest images
+        // Fetch the 8 latest images
         fetch("/dbi")
             .then((imageRows) => {
-                // console.log(imageRows);
                 return imageRows.json();
             })
             .then((imageRows) => {

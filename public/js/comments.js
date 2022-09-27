@@ -29,21 +29,26 @@ const comments = {
     </div>
 </div>
     `,
-    props: ["id"],
+    props: ["id"], //passed in from imgCardBig
     methods: {
+        // Insert comment into DB
         insertComment: function () {
+            // Only of both fields are filled in (show error otherwise)
             if (!this.username || !this.newComment) {
                 this.error = true;
                 return;
             }
             this.error = false;
+
+            // Create object to Post to server
             let bodyObj = {
                 username: this.username,
                 comment: this.newComment,
                 imageId: this.id,
             };
             bodyObj = JSON.stringify(bodyObj);
-            bodyObj;
+
+            // Actually post it
             fetch("/comments", {
                 method: "post",
                 headers: { "Content-Type": "application/json" },
@@ -54,10 +59,10 @@ const comments = {
                 })
                 .then(({ message, commentInfo }) => {
                     this.message = message;
-                    // console.log("commentInfo", commentInfo);
                     commentInfo.created_at = commentInfo.created_at
                         .slice(0, 16)
                         .replace("T", " ");
+                    // If the server gives back info about the comment, push the comment into the array of comments to display
                     if (commentInfo) {
                         this.commentRows.push({
                             username: commentInfo.username,
@@ -65,6 +70,7 @@ const comments = {
                             created_at: commentInfo.created_at,
                         });
                     }
+                    // Reset the comment fields
                     this.username = "";
                     this.newComment = "";
                 });
@@ -72,6 +78,7 @@ const comments = {
     },
 
     watch: {
+        // Watch for changes in the id prop and load new comments accordingly
         id: function () {
             this.commentRows = [];
             fetch(`/comments/${this.id}`)
@@ -91,6 +98,7 @@ const comments = {
 
     },
     mounted: function () {
+        // Load the comments for the chosen image
         this.commentRows = [];
         fetch(`/comments/${this.id}`)
             .then((commentRows) => {
