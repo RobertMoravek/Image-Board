@@ -76,7 +76,10 @@ app.post("/dbi", uploader.single("uploadInput"), s3.upload, (req, res) => {
                     message: "File uploaded",
                     imgInfo: result.rows[0]
                 });
-            });
+            })
+            .catch(
+                console.log('Error uploading image')
+            );
     } else {
         res.json({
             success: false,
@@ -93,7 +96,10 @@ app.get("/delete/:id", (req, res) => {
             console.log('deleted');
             res.send("done");
             return;
-        });
+        })
+        .catch(
+            console.log('Error deleting image')
+        );
 });
 
 
@@ -126,7 +132,10 @@ app.post("/comments", (req, res) => {
                     message: "Comment posted",
                     commentInfo: result.rows[0],
                 });
-            });
+            })
+            .catch(
+                console.log('Error posting comment')
+            );
     } else {
         res.json({
             success: false,

@@ -23,14 +23,14 @@ const app = Vue.createApp({
             if (this.fileTooLarge) {
                 return;
             }
-            this.uploading = true;
-
+            
             const form = e.currentTarget;
             const fileInput = form.querySelector("input[type=file]");
             if (fileInput.files.length < 1) {
                 alert("Add a file, dummy!");
                 return;
             }
+            this.uploading = true;
             const formData = new FormData(form);
             fetch("/dbi", {
                 method: "post",
