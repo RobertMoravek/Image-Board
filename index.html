@@ -18,9 +18,9 @@
                     </div>
                     <!-- UploadExpander changes the class of the uploader, revealing all its fields -->
                     <h3 class="uploadHeadline" id="uploadExpander" v-on:click="uploadExpander">Upload an image<span class="arrowDown" id="arrowDown"></span></h3>
-                    <label for="uploadInput" v-if="message == ''">Image <span v-if="fileTooLarge" class="error-text">[File too big. Max: 2MB]</span></label>
-                    <input type="file" name="uploadInput" id="uploadInput" v-if="message == ''" @change="fileSizeChecker" v-bind="fileToBeUploaded">
-                    <label for="uploadTitle" v-if="message == ''">Title</label>
+                    <label for="uploadInput" v-if="message == ''">Image <span v-if="fileTooLarge" class="error-text">[File too big. Max: 2MB]</span><span v-if="fileTypeWrong" class="error-text">[Only png & jpg allowed!]</span></label>
+                    <input type="file" name="uploadInput" id="uploadInput" v-if="message == ''" @change="fileChecker" v-bind="fileToBeUploaded">
+                    <label for="uploadTitle" v-if="message == ''">Title <span v-if="titleEmpty" class="error-text">[Please fill in]</span></label>
                     <input v-model="title" type="text" name="uploadTitle" id="uploadTitle" placeholder="My image" v-if="message == ''">
                     <h3 v-if="uploadComplete">{{title}}</h3>
                     <label for="uploadDescription" v-if="message == ''">Description</label>                
@@ -29,17 +29,18 @@
                     <input type="submit" value="Upload" class="submitButton" v-if="message == ''">
                     <div class="status green" v-if="message == 'File uploaded'">{{message}}</div>
                     <div class="status red" v-if="message == 'Upload failed'">{{message}}</div>
-                    <!-- <img v-for="image in images" v-bind:src="image" alt="an image" class="image"/> -->
                 </form>
         </header>
 
         <main id="main">  
             <div class="imgCanvas" >
+                <!-- Show all images that were loaded from the server -->
                     <div class="imgCard" v-for="img in imageRows" @click="changeUrl(img.id)" >
                         <img-card-small :img="img"></img-card-small>
                     </div>
             </div>
         </main>
+        <!-- Show overlay of chosen picture (scroll of imgCanvas disabled) -->
         <img-card-big v-if="this.imageId" :id="imageId" @close="this.imageId=0" @delete="updateArray"></img-card-big>
 
         </div>
@@ -47,3 +48,4 @@
         <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
     </body>
 </html>
+

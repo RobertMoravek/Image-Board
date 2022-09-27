@@ -56,8 +56,8 @@ const imgCardBig = {
                 <div class="closeCross" @click="closeImgCardBig">×</div>
             </div>
             <div class="imgInfo">
-            <p class="imgTitle"> {{img.title}} </p>
-            <p class="imgDescription"> {{img.description}} </p>
+            <p class="imgTitleBig"> {{img.title}} </p>
+            <p class="imgDescriptionBig"> {{img.description}} </p>
             <p class="imgUser">by {{img.username}} </p>
             <p class="imgTime"> {{img.created_at}} </p>
             <p class="delete" @click="deleteImage">Delete</p>
@@ -87,7 +87,6 @@ const imgCardBig = {
                     this.next = imageRows[0].prev;
                     this.prev = imageRows[0].next;
                     history.pushState(null, null, "/img/"+ this.imgId);
-                    // this.forceRerender();
                 });
         },
 
@@ -95,11 +94,7 @@ const imgCardBig = {
     components: {
         comments: comments,
     },
-    // computed: {
-    //     commentImgId: function () {
-    //         return this.imgId;
-    //     },
-    // },
+
 
     mounted: function () {
         this.imageLoading = true;
@@ -110,16 +105,20 @@ const imgCardBig = {
                 return imageRows.json();
             })
             .then((imageRows) => {
-                // console.log("imageRows", imageRows);
-                for (let item of imageRows) {
-                    item.created_at = item.created_at
-                        .slice(0, 16)
-                        .replace("T", " ");
+                if (imageRows.length > 0) {
+                    for (let item of imageRows) {
+                        item.created_at = item.created_at
+                            .slice(0, 16)
+                            .replace("T", " ");
+                    }
+                    this.img = imageRows[0];
+                    this.imgId = imageRows[0].id;
+                    this.prev = imageRows[0].prev;
+                    this.next = imageRows[0].next;
+                } else {
+                    this.$emit("close");
+                    history.pushState(null, null, "/");
                 }
-                this.img = imageRows[0];
-                this.imgId = imageRows[0].id;
-                this.prev = imageRows[0].prev;
-                this.next = imageRows[0].next;
             });
     },
 

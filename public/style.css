@@ -368,17 +368,35 @@ input {
     white-space: nowrap;
 }
 
+.imgTitleBig {
+    font-size: 1.2rem;
+    font-weight: 600;
+    width: 100%;
+    display: inline-block;
+    text-align: justify;
+
+} 
+
 
 .imgDescription {
     font-size: 0.8rem;
     height: 1.5rem;
-    width: 260px;
+    width: 100%;
     margin-top: 0.5rem;
     /* overflow: hidden; */
     text-overflow: ellipsis;
     overflow: hidden;
     display: inline-block;
     white-space: nowrap;
+}
+
+.imgDescriptionBig {
+    font-size: 0.8rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    display: inline-block;
+    margin-bottom: 1rem;
+    text-align: justify;
 }
 
 .imgDescription::before {

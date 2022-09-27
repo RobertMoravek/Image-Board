@@ -63,10 +63,11 @@ app.get("/dbi/:id", (req, res) => {
 
 // Image upload route: Send it through Multer and S3 Upload first
 app.post("/dbi", uploader.single("uploadInput"), s3.upload, (req, res) => {
-    console.log('req.body', req.body);
-    console.log('req.file', req.file);
+    // console.log('req.body', req.body);
+    // console.log('req.file', req.file);
     // If it works and there is a file...
     if(req.file){
+        console.log('in if');
         // ... create the Amazon-Link and put it in the db
         let amazonUrl = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
         db.insertImage(amazonUrl, req.body.uploadTitle, req.body.uploadDescription, "tempUser")
@@ -81,6 +82,7 @@ app.post("/dbi", uploader.single("uploadInput"), s3.upload, (req, res) => {
                 console.log('Error uploading image')
             );
     } else {
+        console.log('in else');
         res.json({
             success: false,
             message: "Upload failed",

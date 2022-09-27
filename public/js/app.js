@@ -16,21 +16,39 @@ const app = Vue.createApp({
             imageLoading: true,
             scrollBottomChecker: undefined,
             fileTooLarge: false,
+            fileTypeWrong: false,
+            titleEmpty: false,
         };
     },
     methods: {
+        // When upload frm is submitted...
         onFormSubmit(e) {
-            if (this.fileTooLarge) {
+            // Do nothing if file is too large or wrong type (see fileChecker)
+            if (this.fileTooLarge || this.fileTypeWrong ) {
                 return;
             }
+
+            if (!this.title) {
+                this.titleEmpty = true;
+                return;
+            } else {
+                this.titleEmpty = false;
+            }
             
+            // Get the file
             const form = e.currentTarget;
             const fileInput = form.querySelector("input[type=file]");
+            
+            // If there is no file, show alert and abort
             if (fileInput.files.length < 1) {
                 alert("Add a file, dummy!");
                 return;
             }
+
+            // If everthing is alrigth, set ulpoading to true, thereby starting loading animation
             this.uploading = true;
+
+            // Post the data to the server
             const formData = new FormData(form);
             fetch("/dbi", {
                 method: "post",
@@ -40,8 +58,10 @@ const app = Vue.createApp({
                     return result.json();
                 })
                 .then(({ message, imgInfo }) => {
+                    console.log('printing message and imgInfo', message, imgInfo);
                     this.uploading = false;
                     this.message = message;
+                    // If you get infos about the uploaded file back, create a new object in the imageRows with this info
                     if (imgInfo.url) {
                         this.uploadComplete = true;
                         this.imageRows.unshift({
@@ -51,6 +71,7 @@ const app = Vue.createApp({
                             description: imgInfo.description,
                             user: imgInfo.user,
                         });
+                        // After 2 seconds collapse the upload module, after another second (length of anomation) delete the fields
                         setTimeout(() => {
                             document.getElementById("uploadForm").classList.remove("expanded");
                             document.getElementById("arrowDown").classList.remove("arrowUp");
@@ -62,8 +83,13 @@ const app = Vue.createApp({
                             }, 1000);
                         }, 2000);
                     }
+                })
+                .catch(() => {
+                    this.uploading = false;
+                    this.fileTypeWrong = true;
                 });
         },
+        // Change the size of the upload module to show the fields
         uploadExpander: function (e) {
             if (e.currentTarget.parentNode.classList.contains("expanded")) {
                 e.currentTarget.parentNode.classList.remove("expanded");
@@ -74,13 +100,24 @@ const app = Vue.createApp({
                 // console.log(e.currentTarget.childNodes);
             }
         },
-        fileSizeChecker: function (e) {
+        // Immediately when a file is selected check its filesize and set a flag variable if too big
+        fileChecker: function (e) {
             if (e.target.files[0].size > 2097152) {
                 this.fileTooLarge = true;
             } else {
                 this.fileTooLarge = false;
             }
+            if (
+                e.target.files[0].type == "image/jpeg" ||
+                e.target.files[0].type == "image/png"
+            ) {
+                this.fileTypeWrong = false;
+            } else {
+                this.fileTypeWrong = true;
+            }
+
         },
+        // Load more images, with the id of the last image as the offset
         loadMoreImages: function () {
             let offsetId = this.imageRows[this.imageRows.length - 1].id;
             // console.log('last ID:', offsetId);
@@ -102,24 +139,18 @@ const app = Vue.createApp({
                     this.imageRows.push(...newImageRows);
                 });
         },
+        // Change the url, if a imageId is set and an overlay with that image is displayed
         changeUrl: function (imgId) {
             this.imageId = imgId;
             history.pushState(null, null, `/img/${imgId}`);
         },
-        // newImage: function (id) {
-        //     console.log('new image');
-        //     this.imageId = id;
-        //     this.changeUrl(id);
-        // },
-        removeImage: function (id) {
-            let result = this.imageRows.filter((item) => item.id != id);
-            this.imageRows = result;
-        },
+        // Remove a deleted image from the array of images to be displayed
         updateArray: function (deletedId) {
             let result = this.imageRows.filter(item => item.id != deletedId);
             this.imageRows = result;
             // console.log(this.imageRows);
         },
+        // Scroll to top of page, if Logo is clicked
         scrollToTop: function() {
             window.scroll({ top: 0, left: 0, behavior: "smooth" });
         }
@@ -128,16 +159,9 @@ const app = Vue.createApp({
         "img-card-big": imgCardBig,
         "img-card-small": imgCardSmall
     },
-    // computed: {
-    //     checkImageId: function () {
-    //         if (!this.imageId) {
-    //             return false;
-    //         } else {
-    //             return true;
-    //         }
-    //     },
-    // },
+
     mounted: function () {
+        // Detect scrolling and hide/show menu according to scroll direction
         var prevScrollpos = window.pageYOffset;
         window.onscroll = function () {
             var currentScrollPos = window.pageYOffset;
@@ -151,9 +175,8 @@ const app = Vue.createApp({
             prevScrollpos = currentScrollPos;
         }; 
 
-
+        // If there is an URL with "/img/###" and ### is a number, than open that image
         let tempId;
-
         if (location.pathname.indexOf("/img/") == 0) {
             tempId = +location.pathname.substring(5);
         }
@@ -161,6 +184,7 @@ const app = Vue.createApp({
             this.imageId = tempId;
         }
 
+        // Fetch the 8 altest images
         fetch("/dbi")
             .then((imageRows) => {
                 // console.log(imageRows);
@@ -175,6 +199,7 @@ const app = Vue.createApp({
                 this.imageRows = imageRows;
             })
             .then(() => {
+                // Every 250ms check, if the user has scrolled near the bottom of the page and load more pictures, if so
                 this.scrollBottomChecker = setInterval(() => {
                     if (document.body.scrollHeight - window.scrollY < 1000) {
                         this.loadMoreImages();
@@ -182,6 +207,7 @@ const app = Vue.createApp({
                 }, 250);
             });
 
+        // Listen for user induced states to the browser state and change views to that image, if applicable
         addEventListener("popstate", () => {
             let tempId;
             if (location.pathname.indexOf("/img/") == 0) {
