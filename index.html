@@ -18,8 +18,8 @@
                     </div>
                     <!-- UploadExpander changes the class of the uploader, revealing all its fields -->
                     <h3 class="uploadHeadline" id="uploadExpander" v-on:click="uploadExpander">Upload an image<span class="arrowDown" id="arrowDown"></span></h3>
-                    <label for="uploadInput" v-if="message == ''">Image</label>
-                    <input type="file" name="uploadInput" id="uploadInput" v-if="message == ''">
+                    <label for="uploadInput" v-if="message == ''">Image <span v-if="fileTooLarge" class="error-text">[File too big. Max: 2MB]</span></label>
+                    <input type="file" name="uploadInput" id="uploadInput" v-if="message == ''" @change="fileSizeChecker" v-bind="fileToBeUploaded">
                     <label for="uploadTitle" v-if="message == ''">Title</label>
                     <input v-model="title" type="text" name="uploadTitle" id="uploadTitle" placeholder="My image" v-if="message == ''">
                     <h3 v-if="uploadComplete">{{title}}</h3>

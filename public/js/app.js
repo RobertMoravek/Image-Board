@@ -15,10 +15,14 @@ const app = Vue.createApp({
             description: "",
             imageLoading: true,
             scrollBottomChecker: undefined,
+            fileTooLarge: false,
         };
     },
     methods: {
         onFormSubmit(e) {
+            if (this.fileTooLarge) {
+                return;
+            }
             this.uploading = true;
 
             const form = e.currentTarget;
@@ -68,6 +72,13 @@ const app = Vue.createApp({
                 e.currentTarget.parentNode.classList.add("expanded");
                 e.currentTarget.childNodes[1].classList.add("arrowUp");
                 // console.log(e.currentTarget.childNodes);
+            }
+        },
+        fileSizeChecker: function (e) {
+            if (e.target.files[0].size > 2097152) {
+                this.fileTooLarge = true;
+            } else {
+                this.fileTooLarge = false;
             }
         },
         loadMoreImages: function () {
