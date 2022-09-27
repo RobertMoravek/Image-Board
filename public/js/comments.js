@@ -5,6 +5,7 @@ const comments = {
             commentRows: [],
             newComment: null,
             username: null,
+            error: false,
             message: "",
         };
     },
@@ -23,6 +24,7 @@ const comments = {
         <input type="text" name="username" id="username" v-model="username">
         <label for="newComment">Comment:</label>
         <input type="text" name="newComment" id="newComment" v-model="newComment">
+        <p class="error-text" v-if="error">Please fill out both fields before submitting your comment!</p>
         <input type="submit" value="Send Comment" class="submitButton" @click="insertComment">
     </div>
 </div>
@@ -30,6 +32,11 @@ const comments = {
     props: ["id"],
     methods: {
         insertComment: function () {
+            if (!this.username || !this.newComment) {
+                this.error = true;
+                return;
+            }
+            this.error = false;
             let bodyObj = {
                 username: this.username,
                 comment: this.newComment,
@@ -58,6 +65,8 @@ const comments = {
                             created_at: commentInfo.created_at,
                         });
                     }
+                    this.username = "";
+                    this.newComment = "";
                 });
         },
     },

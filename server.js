@@ -130,7 +130,7 @@ app.post("/comments", (req, res) => {
     } else {
         res.json({
             success: false,
-            message: "Upload failed",
+            message: "Failed to save comment",
         });
     }
 });

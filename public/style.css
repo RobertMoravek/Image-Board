@@ -360,7 +360,7 @@ input {
     font-size: 1.2rem;
     font-weight: 600;
     height: 1.5rem;
-    width: 260px;
+    width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
     display: inline-block;
@@ -503,6 +503,10 @@ input {
   opacity: 0;
 }
 
+.error-text {
+    color: red;
+}
+
 
 @media screen and (max-width: 710px) {
 
@@ -514,6 +518,7 @@ input {
         height: 9rem;
         gap: 0;
         top: 0;
+        max-width: 679px;
     }
 
 
@@ -526,18 +531,9 @@ input {
         justify-content: center;
     }
 
-    /* .imgCardBig{
-        top: 5rem;
-        width: 100%;
-        max-width: 100%;
-        padding-left: 0;
-        padding-right: 0;
+    #uploadForm {
+        margin: 0 1rem;
     }
-    
-    .imgBox {
-        max-width: 95%;
-        width: 95%;
-    } */
 
 }
 
