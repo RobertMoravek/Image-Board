@@ -5,7 +5,7 @@
 A simple SPA for you to upload pictures, look at other users pictures and leave comments. Responsive design and menus. Since this is another student project, there are no user profiles. Please don't abuse.
 
 ## Live website
-https://image-bored.herokuapp.com/
+https://image-bored.onrender.com/
 
 ## Features
 - SPA created with Vue.js
